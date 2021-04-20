@@ -1,12 +1,35 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.shortcuts import render
 
 # Create your views here.
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
+
+User = get_user_model()
+
+
+def register_view(request):
+    form = RegisterForm(request.POST or None)
+    if form.is_valid():
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password1")
+        password2 = form.cleaned_data.get("password2")
+
+        try:
+            user = User.objects.create_user(username, email, password)
+        except:
+            user = None
+        if user != None:
+            # user is valid and is_active
+            login(request, user)
+            return redirecet("/")
+        else:
+            request.session['register_error'] = 1  # 1 == True
+    return render(request, "forms.html", {"form": form})
 
 
 def login_view(request):
-    form = LoginForm(request.post or None)
+    form = LoginForm(request.POST or None)
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
@@ -22,6 +45,7 @@ def login_view(request):
             # return redirect("/invalid-passwod")
             request.session['invalid_user'] = 1  # 1 == True
     return render(request, "forms.html", {"form": form})
+
 
 def logout_view(request):
     logout(request)
