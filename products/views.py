@@ -13,6 +13,16 @@ def home_view(request, *args, **kwargs):
     return render(request, "home.html", context)
 
 
+def search_view(request, *args, **kwargs): # /search/
+    # print(args, kwargs)
+    # return HttpResponse("<h1>Hello world</h1>")
+    query = request.GET.get('q') # q
+    qs = Product.objects.filter(title__icontains=query[0])
+    print(query, qs)
+    context = {"name": "abc", "query": query}
+    return render(request, "home.html", context)
+
+
 def product_detail_view(request, pk):
     try:
         obj = Product.objects.get(pk=pk)

@@ -63,6 +63,6 @@ class LoginForm(forms.Form):
     def clean_username(self):
         username = self.cleaned_data.get("username")
         qs = User.objects.filter(username__iexact=username)
-        if not qs.exist():
+        if not qs.exists():
             raise forms.ValidationError("This is an invalid user.")
         return username
