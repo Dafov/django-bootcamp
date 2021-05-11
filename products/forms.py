@@ -9,6 +9,7 @@ class ProductModelForm(forms.ModelForm):
             'title',
             'content',
             'image',
+            'media',
         ]
     
     def clean_content(self):

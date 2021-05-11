@@ -48,11 +48,15 @@ def product_api_detail_view(request, pk, *args, **kwargs):
 
 @staff_member_required
 def product_create_view(request, *args, **kwargs):
-    form = ProductModelForm(request.POST or None, request.FILES or N)
+    form = ProductModelForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         obj = form.save(commit=False)
-        image = request.FILES['image']
-        obj.image = image
+        image = request.FILES.get('image')
+        media = request.FILES.get('media')
+        if image:
+            obj.image = image
+        if media:
+            obj.media = media
         obj.user = request.user
         obj.save()
 
