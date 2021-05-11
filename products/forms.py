@@ -8,6 +8,7 @@ class ProductModelForm(forms.ModelForm):
         fields = [
             'title',
             'content',
+            'image',
         ]
     
     def clean_content(self):
