@@ -2,16 +2,22 @@
 
 {% block title %}
 {{ object.title }} - {{ block.super }}
+
 {% endblock %}
+
 
 {% block content %}
 
-<h1>{{ object.title }}</h1>
+{% include "products/snippets/product_details.html" with product=object %}
 
-{% if request.path == "/" %}
-    <h3>Welcome budy</h3>
+
+{% if can_order %}
+
+<a href='/checkout'>${{ object.price}} {{ object.order_btn_title }}</a>
+
 {% else %}
-    {% include "products/detail_snippet.html" with product=object %}
+    {% if form %}
+        {% include 'snippets/form.html' with form=form submit_btn='Add to waitlist' %}
+    {% endif %}
 {% endif %}
-
 {% endblock content %}
